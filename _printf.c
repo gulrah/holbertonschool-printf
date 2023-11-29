@@ -1,11 +1,15 @@
 #include <stdarg.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <unistd.h>
 #include "main.h"
 
 int _printf(const char *format, ...) {
     va_list args;
     int count = 0;
+
+    if (format == NULL)
+	    return -1;
 
     va_start(args, format);
 

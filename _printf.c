@@ -1,79 +1,65 @@
-#include <stdarg.h>
-#include <unistd.h>
 #include "main.h"
+#include <stdarg.h>
+#include <unistd.h> /* For write */
 
 /**
- * _printf - Our custom printf function
- * @format: The format string
- * @...: Variable arguments
- *
- * Return: Number of characters printed (excluding null byte)
+ * _printf - Custom printf function
+ * @format: Format string
+ * Return: Number of characters printed (excluding the null byte)
  */
 int _printf(const char *format, ...)
 {
+    if (!format)
+        return -1; /* Handle NULL format pointer */
+
     va_list args;
     int count = 0;
+    const char *ptr = format;
 
     va_start(args, format);
 
-    while (format && *format)
+    while (*ptr)
     {
-        if (*format == '%' && *(format + 1))
+        if (*ptr == '%' && *(ptr + 1) == 'c')
         {
-            format++;
-            switch (*format)
+            char c = va_arg(args, int);
+            write(1, &c, 1);
+            count++;
+            ptr += 2; /* Skip '%c' */
+        }
+        else if (*ptr == '%' && *(ptr + 1) == 's')
+        {
+            char *str = va_arg(args, char*);
+            if (str)
             {
-                case 'c':
-                    count += _putchar(va_arg(args, int));
-                    break;
-                case 's':
-                    count += _puts(va_arg(args, char *));
-                    break;
-                case '%':
-                    count += _putchar('%');
-                    break;
-                default:
-                    count += _putchar('%') + _putchar(*format);
-                    break;
+                while (*str)
+                {
+                    write(1, str, 1);
+                    str++;
+                    count++;
+                }
             }
+            else
+            {
+                write(1, "(null)", 6);
+                count += 6; /* Length of "(null)" */
+            }
+            ptr += 2; /* Skip '%s' */
+        }
+        else if (*ptr == '%' && *(ptr + 1) == '%')
+        {
+            write(1, "%", 1);
+            count++;
+            ptr += 2; /* Skip '%%' */
         }
         else
         {
-            count += _putchar(*format);
+            write(1, ptr, 1);
+            count++;
+            ptr++;
         }
-        format++;
     }
 
     va_end(args);
-
-    return count;
-}
-
-/**
- * _putchar - Writes a character to stdout
- * @c: The character to write
- *
- * Return: 1 on success, -1 on error
- */
-int _putchar(char c)
-{
-    return write(1, &c, 1);
-}
-
-/**
- * _puts - Writes a string to stdout
- * @str: The string to write
- *
- * Return: The number of characters written
- */
-int _puts(char *str)
-{
-    int count = 0;
-    while (str && *str)
-    {
-        _putchar(*str);
-        count += _putchar(*str);
-        str++;
-    }
     return count;
 }

@@ -1,5 +1,6 @@
 #include <stdarg.h>
-#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "main.h"
 
 /**
@@ -27,7 +28,17 @@ int _printf(const char *format, ...)
                     count += _putchar(va_arg(args, int));
                     break;
                 case 's':
-                    count += _puts(va_arg(args, char *));
+                    {
+                        char *str = va_arg(args, char *);
+                        if (str == NULL)
+                        {
+                            count += _puts("(null)");
+                        }
+                        else
+                        {
+                            count += _puts(str);
+                        }
+                    }
                     break;
                 case '%':
                     count += _putchar('%');
@@ -72,7 +83,7 @@ int _puts(char *str)
     while (str && *str)
     {
         _putchar(*str);
-        count += _putchar(*str);
+        count++;
         str++;
     }
     return count;

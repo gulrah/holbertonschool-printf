@@ -72,7 +72,7 @@ int _puts(char *str)
     while (str && *str)
     {
         _putchar(*str);
-        count++;
+        count += _putchar(*str);
         str++;
     }
     return count;

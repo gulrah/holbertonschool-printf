@@ -32,6 +32,9 @@ int _printf(const char *format, ...) {
                 case 'd':
                     count += _print_number(va_arg(args, int));
                     break;
+		case 'i':
+		    count += _print_number(va_arg(args, int));
+		    break;
                 case 'p':
                     count += _print_pointer(va_arg(args, void *));
                     break;

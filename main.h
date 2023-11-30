@@ -9,5 +9,4 @@ int _print_pointer(void *ptr);
 int _print_unsigned(unsigned int n);
 int _print_octal(unsigned int n);
 int _print_hex(unsigned int n, int uppercase);
-
 #endif /* MAIN_H */
